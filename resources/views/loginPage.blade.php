@@ -25,7 +25,7 @@
         .image-section {
             flex: 1;
             background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-                url('image/toko.jpg');
+                url('image/gambar1.jpg');
             background-size: cover;
             background-position: center;
         }
@@ -161,7 +161,7 @@
                     <button type="submit" class="btn btn-login">Login</button>
                     <a href="#" class="forgot-password d-block">Forgot Password?</a>
                     <button type="button" class="google-login">
-                        <img src="ggole.png" alt="Google" class="google-logo">
+                        <img src="{{asset('image/ggogle.png')}}" alt="Google" class="google-logo">
                         Continue with Google
                     </button>
                     <p class="signup-text">
