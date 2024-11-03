@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Surga Sepatu</title>
+    <title>Register - Surga Sepatu</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <style>
@@ -148,7 +148,7 @@
                 <div class="text-center">
                     <img src="{{ asset('image/logo.jpg')}}" alt="Surga Sepatu Logo" class="logo">
                 </div>
-                <h1 class="login-title">Login</h1>
+                <h1 class="login-title">Register</h1>
                 <form>
                     <div class="form-group">
                         <label for="username">Username</label>
@@ -158,15 +158,15 @@
                         <label for="password">Password</label>
                         <input type="password" class="form-control" id="password" placeholder="Enter your password">
                     </div>
-                    <button type="submit" class="btn btn-login">Login</button>
-                    <a href="#" class="forgot-password d-block">Forgot Password?</a>
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirm Password</label>
+                        <input type="confirmPassword" class="form-control" id="confirmPassword" placeholder="Confirm Password">
+                    </div>
                     <button type="button" class="google-login">
                         <img src="{{asset('image/google.png')}}" alt="Google" class="google-logo">
-                        Continue with Google
+                        atau Gunakan Google
                     </button>
-                    <p class="signup-text">
-                        Don't have an account yet? <a href="register">Sign up</a>
-                    </p>
+                    <button type="submit" class="btn btn-login">Login</button>
                 </form>
             </div>
         </div>
