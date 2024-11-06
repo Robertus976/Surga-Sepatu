@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+Use Carbon\Carbon;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -18,7 +19,9 @@ class AppServiceProvider extends ServiceProvider
      * Bootstrap any application services.
      */
     public function boot(): void
-    {
-        //
-    }
+{
+    // Mengatur lokal aplikasi
+    config(['app.locale' => 'id']); // Perbaikan di sini
+    Carbon::setLocale('id');
+}
 }
