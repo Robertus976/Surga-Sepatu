@@ -149,21 +149,30 @@
                     <img src="{{ asset('image/logo.jpg')}}" alt="Surga Sepatu Logo" class="logo">
                 </div>
                 <h1 class="login-title">Login</h1>
-                <form>
+
+                <!-- Menampilkan pesan kesalahan -->
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
+                <form method="POST" action="{{ route('login') }}">
+                    @csrf
                     <div class="form-group">
                         <label for="username">Username</label>
-                        <input type="text" class="form-control" id="username" placeholder="Enter your username">
+                        <input type="text" class="form-control" id="username" name="username" placeholder="Enter your username" required>
                     </div>
                     <div class="form-group">
                         <label for="password">Password</label>
-                        <input type="password" class="form-control" id="password" placeholder="Enter your password">
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required>
                     </div>
                     <button type="submit" class="btn btn-login">Login</button>
-                    <a href="#" class="forgot-password d-block">Forgot Password?</a>
-                    <button type="button" class="google-login">
-                        <img src="{{asset('image/google.png')}}" alt="Google" class="google-logo">
-                        Continue with Google
-                    </button>
+                    <a href="{{ route('password.request') }}" class="forgot-password d-block">Forgot Password?</a>
                     <p class="signup-text">
                         Don't have an account yet? <a href="register">Sign up</a>
                     </p>
@@ -171,9 +180,3 @@
             </div>
         </div>
     </div>
-
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-
-</html>
