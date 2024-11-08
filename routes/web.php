@@ -17,6 +17,9 @@ Route::get('/', function () {
 // Halaman login dan register
 Route::get('/login', [LoginController::class, 'halamanLogin'])->name('login');
 Route::get('/register', [RegisterController::class, 'halamanRegister']);
+Route::get('/home', function () {
+    return view('home');
+});
 
 // Halaman form untuk forgot password
 Route::get('/forgot-password', function () {
