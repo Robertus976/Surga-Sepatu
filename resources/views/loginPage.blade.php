@@ -25,7 +25,7 @@
         .image-section {
             flex: 1;
             background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-                url('image/gambar1.jpg');
+                url('{{ asset('image/gambar1.jpg') }}');
             background-size: cover;
             background-position: center;
         }
@@ -95,24 +95,6 @@
             text-decoration: none;
         }
 
-        .google-login {
-            width: 100%;
-            padding: 0.8rem;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            background: white;
-            color: #666;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 1rem;
-        }
-
-        .google-logo {
-            width: 20px;
-            margin-right: 10px;
-        }
-
         .signup-text {
             text-align: center;
             color: #666;
@@ -150,6 +132,13 @@
                 </div>
                 <h1 class="login-title">Login</h1>
 
+                <!-- Menampilkan pesan sukses -->
+                @if (session('status'))
+                    <div class="alert alert-success">
+                        {{ session('status') }}
+                    </div>
+                @endif
+
                 <!-- Menampilkan pesan kesalahan -->
                 @if ($errors->any())
                     <div class="alert alert-danger">
@@ -161,11 +150,11 @@
                     </div>
                 @endif
 
-                <form method="POST" action="{{ route('login') }}">
+                <form method="POST" action="{{ route('login.post') }}">
                     @csrf
                     <div class="form-group">
-                        <label for="username">Username</label>
-                        <input type="text" class="form-control" id="username" name="username" placeholder="Enter your username" required>
+                        <label for="name">Username</label>
+                        <input type="text" class="form-control" id="name" name="name" placeholder="Enter your username" value="{{ old('name') }}" required>
                     </div>
                     <div class="form-group">
                         <label for="password">Password</label>
@@ -174,9 +163,15 @@
                     <button type="submit" class="btn btn-login">Login</button>
                     <a href="{{ route('password.request') }}" class="forgot-password d-block">Forgot Password?</a>
                     <p class="signup-text">
-                        Don't have an account yet? <a href="register">Sign up</a>
+                        Don't have an account yet? <a href="{{ route('register') }}">Sign up</a>
                     </p>
                 </form>
             </div>
         </div>
     </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
