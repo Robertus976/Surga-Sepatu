@@ -25,12 +25,12 @@
         .image-section {
             flex: 1;
             background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-                url('image/gambar1.jpg');
+                url('{{ asset('image/gambar1.jpg') }}');
             background-size: cover;
             background-position: center;
         }
 
-        .login-section {
+        .register-section {
             flex: 1;
             display: flex;
             flex-direction: column;
@@ -40,7 +40,7 @@
             background-color: white;
         }
 
-        .login-box {
+        .register-box {
             width: 100%;
             max-width: 400px;
             padding: 2rem;
@@ -52,7 +52,7 @@
             margin-bottom: 1.5rem;
         }
 
-        .login-title {
+        .register-title {
             font-size: 24px;
             font-weight: bold;
             margin-bottom: 2rem;
@@ -71,7 +71,7 @@
             margin-bottom: 1rem;
         }
 
-        .btn-login {
+        .btn-register {
             background-color: #FF0000;
             color: white;
             border: none;
@@ -82,44 +82,18 @@
             margin-bottom: 1rem;
         }
 
-        .btn-login:hover {
+        .btn-register:hover {
             background-color: #CC0000;
             color: white;
         }
 
-        .forgot-password {
-            text-align: center;
-            color: #666;
-            font-size: 14px;
-            margin-bottom: 1rem;
-            text-decoration: none;
-        }
-
-        .google-login {
-            width: 100%;
-            padding: 0.8rem;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            background: white;
-            color: #666;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 1rem;
-        }
-
-        .google-logo {
-            width: 20px;
-            margin-right: 10px;
-        }
-
-        .signup-text {
+        .login-text {
             text-align: center;
             color: #666;
             font-size: 14px;
         }
 
-        .signup-text a {
+        .login-text a {
             color: #FF0000;
             text-decoration: none;
         }
@@ -133,7 +107,7 @@
                 height: 30vh;
             }
 
-            .login-box {
+            .register-box {
                 padding: 1rem;
             }
         }
@@ -143,36 +117,52 @@
 <body>
     <div class="main-container">
         <div class="image-section"></div>
-        <div class="login-section">
-            <div class="login-box">
+        <div class="register-section">
+            <div class="register-box">
                 <div class="text-center">
-                    <img src="{{ asset('image/logo.jpg')}}" alt="Surga Sepatu Logo" class="logo">
+                    <img src="{{ asset('image/logo.jpg') }}" alt="Surga Sepatu Logo" class="logo">
                 </div>
-                <h1 class="login-title">Register</h1>
-                <form>
+                <h1 class="register-title">Register</h1>
+
+                <!-- Menampilkan pesan kesalahan -->
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
+                <form method="POST" action="{{ route('register') }}">
+                    @csrf
                     <div class="form-group">
-                        <label for="username">Username</label>
-                        <input type="text" class="form-control" id="username" placeholder="Enter your username">
+                        <label for="name">Name</label>
+                        <input type="text" class="form-control" id="name" name="name" placeholder="Enter your name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required>
                     </div>
                     <div class="form-group">
                         <label for="password">Password</label>
-                        <input type="password" class="form-control" id="password" placeholder="Enter your password">
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required>
                     </div>
                     <div class="form-group">
-                        <label for="confirmPassword">Confirm Password</label>
-                        <input type="confirmPassword" class="form-control" id="confirmPassword" placeholder="Confirm Password">
+                        <label for="password_confirmation">Confirm Password</label>
+                        <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" placeholder="Confirm your password" required>
                     </div>
-                    <button type="button" class="google-login">
-                        <img src="{{asset('image/google.png')}}" alt="Google" class="google-logo">
-                        atau Gunakan Google
-                    </button>
-                    <button type="submit" class="btn btn-login">Login</button>
+                    <button type="submit" class="btn btn-register">Register</button>
+                    <p class="login-text">
+                        Already have an account? <a href="{{ route('login') }}">Login</a>
+                    </p>
                 </form>
             </div>
         </div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 

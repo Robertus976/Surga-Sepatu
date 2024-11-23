@@ -66,7 +66,7 @@
                 <a href="https://www.tiktok.com/@surgasepatujogja_" target="_blank" class="btn-sosmed">
                   <i class="fa-brands fa-tiktok"></i>
                 </a>
-                
+
                 </a>
               </div>
             </div>
@@ -84,7 +84,7 @@
           </div>
           <article class="about-content">
             <p>
-                Selamat datang di [ SURGA SEPATU ]!
+                Selamat datang di SURGA SEPATU!
 
                 Kami adalah toko sepatu yang berdedikasi untuk menyediakan sepatu berkualitas tinggi dan nyaman untuk segala kebutuhan. Sejak berdiri pada tahun [Tahun Berdiri], kami telah melayani pelanggan dengan berbagai macam koleksi sepatu, mulai dari sepatu kasual, olahraga, hingga sepatu formal. Kami percaya bahwa setiap langkah Anda adalah penting, itulah mengapa kami selalu memilih sepatu dengan bahan terbaik, desain terkini, dan harga yang terjangkau.
             </p>
@@ -97,7 +97,7 @@
             <div class="deskripsi-banner-product">
               <h3>koleksi teratas</h3>
               <p>Temukan gaya dan kenyamanan di setiap langkah, Toko sepatu kami menawarkan pilihan terbaik. Dari kasual hingga formal, kami memiliki semuanya, Kualitas unggul, gaya tak tertandingi, oh wow!</p>
-              <a href="#Product" class="style-active-button">beli</a>
+              <a href="#Product" class="style-active-button">Beli</a>
             </div>
           </div>
           <div class="wrapper-card">
@@ -105,7 +105,7 @@
               <div class="card-product-promo">
                 <div class="flex-between">
                   <h3>PENAWARAN</h3>
-                  <a href="#product">lihat</a>
+                  <a href="#product">Lihat</a>
                 </div>
                 <img src="image/asets/Product/Nike-blazer-mid.png" alt="Nike-blazer-mid" />
                 <h3>Nike Blazer Mid</h3>
@@ -405,7 +405,7 @@
                     <span class="harga-awal">$299</span>
                   </div>
                 </div>
-                
+
                 <!-- card 8 -->
                 <div class="card">
                   <img src="image/asets/Product/converse-run-star-Black.png" alt="Converse-run-star-hike-Mustard" />
@@ -447,15 +447,15 @@
             </div>
             <div class="image-contact">
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1587.980642927764!2d110.39131891900664!3d-7.768017565904233!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7a59ba6aaae26d%3A0xb4238289a4d0a30e!2sToko%20Surgasepatu%20Jogja!5e0!3m2!1sid!2sid!4v1730746566657!5m2!1sid!2sid" 
-                width="600" 
-                height="450" 
-                style="border:0;" 
-                allowfullscreen="" 
-                loading="lazy" 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1587.980642927764!2d110.39131891900664!3d-7.768017565904233!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7a59ba6aaae26d%3A0xb4238289a4d0a30e!2sToko%20Surgasepatu%20Jogja!5e0!3m2!1sid!2sid!4v1730746566657!5m2!1sid!2sid"
+                width="600"
+                height="450"
+                style="border:0;"
+                allowfullscreen=""
+                loading="lazy"
                 referrerpolicy="no-referrer-when-downgrade"
-            
-               
+
+
               ></iframe>
             </div>
           </div>
@@ -611,25 +611,25 @@
                     <li><strong>Alamat:</strong>jln.selokan mataram</li>
                     <li><strong>Email:</strong> surgasepatu@gmail.com</li>
                   </ul>
-  
+
                   <h2>layanan kami </h2>
                   <ul>
                     <li><strong>koleksi sepatuh:</strong>  Sepatu kasual, olahraga, formal, dan anak-anak</li>
                     <li><strong>pengiriman:</strong> seluruh indonesia</li>
                     <li><strong>garansi:</strong> selama 1 bulan</li>
                   </ul>
-  
+
                   <h2>Status</h2>
                   <ul>
                     <li><strong>toko aktif:</strong>buka senin -jumat</li>
                   </ul>
-  
+
                   <h2>Kelebihan</h2>
                   <ul>
                     <li>kualitas terjamin</li>
                     <li>harga terjangkau</li>
                     <li>pengiriman cepat</li>
-                    
+
                   </ul>
                 </div>
               </div>
@@ -638,7 +638,7 @@
         </div>
       </section>
       <!-- overlay profile -->
-      
+
      <!--tempat foter wa -->
 
       <footer>
