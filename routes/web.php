@@ -1,109 +1,55 @@
 <?php
 
-use App\Http\Controllers\LoginController;
-use App\Http\Controllers\RegisterController;
-use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Password;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Str;
-use Illuminate\Auth\Events\PasswordReset;
+use App\Http\Controllers\HomeController;
 
-// ====================== HALAMAN UTAMA ======================
-Route::get('/', function () {
-    return view('welcome'); // Halaman utama
-})->name('home');
+// Home Route
+Route::get('/', [HomeController::class, 'home']);
 
-// ====================== AUTHENTICATION ROUTES ======================
+// Dashboard Route
+Route::get('/dashboard', [HomeController::class, 'home'])
+    ->middleware(['auth', 'verified'])->name('dashboard');
 
-// Login Routes
-Route::get('/login', [LoginController::class, 'halamanLogin'])->name('login');
-Route::post('/login', [LoginController::class, 'login'])->name('login.post');
+// Profile Routes
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
 
-// Register Routes
-Route::get('/register', [RegisterController::class, 'halamanRegister'])->name('register');
-Route::post('/register', [RegisterController::class, 'register'])->name('register.post');
+// Auth routes
+require __DIR__ . '/auth.php';
 
-// ====================== EMAIL VERIFICATION ======================
+// Admin Dashboard Route (should be handled by AdminController)
+Route::get('admin/dashboard', [AdminController::class, 'index'])->middleware(['auth', 'admin']);
 
-// Halaman pemberitahuan verifikasi email
-Route::get('/register/verify', function () {
-    return view('auth.verify-email');
-})->name('register.verify');
+// Route for Categories
+Route::get('view_category', [AdminController::class, 'view_category'])->middleware(['auth', 'admin']);
+Route::post('add_category', [AdminController::class, 'add_category'])->middleware(['auth', 'admin']);
+Route::get('delete_category/{id}', [AdminController::class, 'delete_category'])->middleware(['auth', 'admin']);
+Route::get('edit_category/{id}', [AdminController::class, 'edit_category'])->middleware(['auth', 'admin']);
+Route::post('update_category/{id}', [AdminController::class, 'update_category'])->middleware(['auth', 'admin']);
 
-// Proses verifikasi email
-Route::get('/email/verify/{id}/{hash}', function ($id, $hash) {
-    $user = \App\Models\User::find($id);
+// Route for Products
+Route::middleware(['auth', 'admin'])->group(function() {
+    Route::get('add_product', [AdminController::class, 'add_product'])->name('add_product');
+    Route::post('upload_product', [AdminController::class, 'upload_product'])->name('upload_product');
+    Route::get('view_product', [AdminController::class, 'view_product'])->name('view_product');
+    Route::get('hapus_product/{id}', [AdminController::class, 'hapus_product'])->name('hapus_product');
+    Route::get('update_product/{id}', [AdminController::class, 'update_product'])->name('update_product');
+    Route::post('edit_product/{id}', [AdminController::class, 'edit_product'])->name('edit_product');
+    Route::get('cari_product', [AdminController::class, 'search_product'])->name('search_product');
 
-    if (!$user || !hash_equals(sha1($user->email), $hash)) {
-        return redirect()->route('login')->with('status', 'Link verifikasi tidak valid atau sudah kadaluarsa.');
-    }
+    // Routes for Banner
+    Route::get('/view_banner', [AdminController::class, 'view_banner'])->name('view_banner');
+    Route::get('/add_banner', [AdminController::class, 'add_banner'])->name('add_banner');
+    Route::post('/upload_banner', [AdminController::class, 'upload_banner'])->name('upload_banner');
+    Route::get('/update_banner/{id}', [AdminController::class, 'update_banner'])->name('update_banner');
+    Route::post('/edit_banner/{id}', [AdminController::class, 'edit_banner'])->name('edit_banner');
+    Route::get('/delete_banner/{id}', [AdminController::class, 'delete_banner'])->name('delete_banner');
+});
 
-    if ($user->hasVerifiedEmail()) {
-        return redirect()->route('login')->with('status', 'Email Anda sudah diverifikasi.');
-    }
-
-    $user->markEmailAsVerified();
-
-    return redirect()->route('login')->with('status', 'Email Anda berhasil diverifikasi. Silakan login.');
-})->middleware(['signed'])->name('verification.verify');
-
-// Mengirim ulang email verifikasi
-Route::post('/email/verification-notification', function (Request $request) {
-    $request->user()->sendEmailVerificationNotification();
-    return back()->with('status', 'Link verifikasi telah dikirim ulang.');
-})->middleware(['auth', 'throttle:6,1'])->name('verification.send');
-
-// ====================== PASSWORD RESET ======================
-
-// Halaman untuk meminta reset password
-Route::get('/forgot-password', function () {
-    return view('auth.forgot-password'); // Pastikan view ini ada
-})->middleware('guest')->name('password.request');
-
-// Mengirim email reset password
-Route::post('/forgot-password', function (Request $request) {
-    $request->validate(['email' => 'required|email']);
-
-    $status = Password::sendResetLink(
-        $request->only('email')
-    );
-
-    return $status === Password::RESET_LINK_SENT
-        ? back()->with('status', __($status))
-        : back()->withErrors(['email' => __($status)]);
-})->middleware('guest')->name('password.email');
-
-// Halaman reset password menggunakan token
-Route::get('/reset-password/{token}', function ($token) {
-    return view('auth.reset-password', ['token' => $token]);
-})->middleware('guest')->name('password.reset');
-
-// Proses reset password
-Route::post('/reset-password', function (Request $request) {
-    $request->validate([
-        'token' => 'required',
-        'email' => 'required|email',
-        'password' => 'required|min:8|confirmed',
-    ]);
-
-    $status = Password::reset(
-        $request->only('email', 'password', 'password_confirmation', 'token'),
-        function ($user, $password) {
-            $user->forceFill([
-                'password' => \Illuminate\Support\Facades\Hash::make($password),
-            ])->setRememberToken(\Illuminate\Support\Str::random(60));
-
-            $user->save();
-        }
-    );
-
-    return $status === Password::PASSWORD_RESET
-        ? redirect()->route('login')->with('status', 'Password berhasil direset. Silakan login.')
-        : back()->withErrors(['email' => [__($status)]]);
-})->middleware('guest')->name('password.update');
-
-Route::get('/home', function () {
-    return view('home'); // Pastikan view `home.blade.php` ada di folder resources/views
-})->middleware('auth')->name('home');
+// Product Details Route
+Route::get('product_details/{id}', [HomeController::class, 'product_details']);
