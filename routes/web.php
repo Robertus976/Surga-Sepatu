@@ -12,6 +12,10 @@ Route::get('/', [HomeController::class, 'home']);
 Route::get('/dashboard', [HomeController::class, 'home'])
     ->middleware(['auth', 'verified'])->name('dashboard');
 
+Route::get('/myorders', [HomeController::class, 'myorders'])
+    ->middleware(['auth', 'verified'])->name('dashboard');
+
+   
 // Profile Routes
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -25,6 +29,8 @@ require __DIR__ . '/auth.php';
 // Admin Dashboard Route (should be handled by AdminController)
 Route::get('admin/dashboard', [AdminController::class, 'index'])->middleware(['auth', 'admin']);
 
+
+
 // Route for Categories
 Route::get('view_category', [AdminController::class, 'view_category'])->middleware(['auth', 'admin']);
 Route::post('add_category', [AdminController::class, 'add_category'])->middleware(['auth', 'admin']);
@@ -33,7 +39,7 @@ Route::get('edit_category/{id}', [AdminController::class, 'edit_category'])->mid
 Route::post('update_category/{id}', [AdminController::class, 'update_category'])->middleware(['auth', 'admin']);
 
 // Route for Products
-Route::middleware(['auth', 'admin'])->group(function() {
+Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('add_product', [AdminController::class, 'add_product'])->name('add_product');
     Route::post('upload_product', [AdminController::class, 'upload_product'])->name('upload_product');
     Route::get('view_product', [AdminController::class, 'view_product'])->name('view_product');
@@ -53,3 +59,12 @@ Route::middleware(['auth', 'admin'])->group(function() {
 
 // Product Details Route
 Route::get('product_details/{id}', [HomeController::class, 'product_details']);
+
+
+//Order
+Route::get('view_order', [AdminController::class, 'view_order'])->middleware(['auth', 'admin']);
+Route::get('dalam_perjalanan/{id}', [AdminController::class, 'dalam_perjalanan'])->middleware(['auth', 'admin']);
+Route::get('mengantar/{id}', [AdminController::class, 'mengantar'])->middleware(['auth', 'admin']);
+
+//Print PDF
+Route::get('print_pdf/{id}', [AdminController::class, 'print_pdf'])->middleware(['auth', 'admin']);

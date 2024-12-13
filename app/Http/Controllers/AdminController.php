@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Banner;
+use App\Models\Order;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class AdminController extends Controller
 {
@@ -211,6 +213,48 @@ class AdminController extends Controller
 
         toastr()->timeOut(10000)->closeButton()->addSuccess('Banner Berhasil Dihapus');
         return redirect()->route('view_banner');
+    }
+
+    public function view_order()
+    {
+        $data = Order::all();
+        return view('admin.order',compact('data'));
+    }
+
+    public function dalam_perjalanan($id)
+    {
+
+        $data = Order::find($id);
+
+        $data->status = 'Dalam Perjalanan';
+
+        $data->save();
+
+        return redirect('/view_order');
+
+    }
+
+    public function mengantar($id)
+    {
+
+        $data = Order::find($id);
+
+        $data->status = 'Mengantar';
+
+        $data->save();
+
+        return redirect('/view_order');
+
+    }
+
+    public function print_pdf($id)
+    {
+
+        $data =Order::find($id);
+
+        $pdf = Pdf::loadView('admin.invoice',compact('data'));
+
+        return $pdf->download('invoice.pdf');
     }
 }
 
