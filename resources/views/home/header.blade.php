@@ -39,8 +39,13 @@
 
                     @auth
 
-                    <a href="">
+                    <a href="{{url('myorders')}}">
+                        My Orders 
+                    </a>
+
+                    <a href="{{url('mycart')}}">
                         <i class="fa fa-shopping-bag" aria-hidden="true"></i>
+                        [{{$count}}]
                     </a>
 
                   <!-- Tombol Logout -->
