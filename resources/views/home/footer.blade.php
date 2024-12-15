@@ -55,16 +55,6 @@
             </div>
         </div>
     </div>
-    <!-- footer section -->
-    <footer class=" footer_section">
-        <div class="container">
-            <p>
-                &copy; <span id="displayYear"></span> Website Milik
-                <a href="https://html.design/">Surga Sepatu</a>
-            </p>
-        </div>
-    </footer>
-    <!-- footer section -->
 
 </section>
 

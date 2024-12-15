@@ -50,10 +50,13 @@
             </div>
         </div>
     </section>
-    <!-- info section -->
-    <footer>
-        @include('home.footer')
+     <!-- info section -->
+     <footer>
+        &copy; 2024 Surga Sepatu. Semua Hak Dilindungi.
     </footer>
+</body>
+
+</html>
 
 <style>
     /* Tambahkan padding di container untuk jarak ke kiri dan kanan */
@@ -153,5 +156,16 @@
     /* Efek hover pada tombol */
     .button-container .btn:hover {
         background-color: #e64a19;
+    }
+    footer {
+    text-align: center;
+    margin-top: 30px;
+    font-size: 16px;
+    color: #777;
+    padding: 15px;
+    background: #ff5722;
+    color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     }
 </style>

@@ -217,15 +217,15 @@ class AdminController extends Controller
         toastr()->timeOut(10000)->closeButton()->addSuccess('Banner Berhasil Dihapus');
         return redirect()->route('view_banner');
     }
+
     public function view_order()
     {
         $data = Order::all();
-        return view('admin.order',compact('data'));
+        return view('admin.order', compact('data'));
     }
 
     public function dalam_perjalanan($id)
     {
-
         $data = Order::find($id);
 
         $data->status = 'Dalam Perjalanan';
@@ -233,30 +233,22 @@ class AdminController extends Controller
         $data->save();
 
         return redirect('/view_orders');
-
     }
 
     public function terkirim($id)
     {
-
         $data = Order::find($id);
-
         $data->status = 'Terkirim';
-
         $data->save();
-
         return redirect('/view_orders');
-
     }
 
     public function print_pdf($id)
     {
+        $data = Order::find($id);
 
-        $data =Order::find($id);
-
-        $pdf = Pdf::loadView('admin.invoice',compact('data'));
+        $pdf = Pdf::loadView('admin.invoice', compact('data'));
 
         return $pdf->download('invoice.pdf');
     }
 }
-

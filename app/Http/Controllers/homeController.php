@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+
 use App\Models\Product;
 use App\Models\Banner;
 use App\Mail\ContactMail;
@@ -16,6 +17,7 @@ class HomeController extends Controller
 {
     public function index()
     {
+
         // Count the number of users where 'usertype' is 'user'
         $user = User::where('usertype', 'user')->get()->count();
         $product = Product::all()->count();
@@ -25,6 +27,7 @@ class HomeController extends Controller
 
         // Pass the variable to the view
         return view('admin.index', compact('user', 'product', 'order', 'deliverd'));  // Ensure 'user' is passed here
+
     }
 
     public function home()
@@ -209,12 +212,10 @@ private function getCartCount()
     }
     public function myorders()
     {
-        $user =Auth::user()->id;
-
+        $user = Auth::user()->id;
         $count = Cart::where('user_id', $user)->get()->count();
+        $order = Order::where('user_id', $user)->get();
 
-        $order = Order::where('user_id',$user)->get();
-
-        return view('home.order',compact('count','order'));
+        return view('home.order', compact('count', 'order'));
     }
 }

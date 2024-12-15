@@ -346,12 +346,10 @@
         </div>
     </div>
 </section>
-    <!-- product details end -->
-
-    <!-- info section -->
-    <footer>
-        @include('home.footer')
-    </footer>
+  <!-- info section -->
+  <footer>
+    @include('home.footer')
+</footer>
 </body>
 
 </html>
