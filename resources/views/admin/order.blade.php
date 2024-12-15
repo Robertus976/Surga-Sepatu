@@ -43,10 +43,7 @@
         <div class="page-header">
             <div class="container-fluid">
 
-
                 <div class="table_center">
-
-
                     <table>
                         <tr>
                             <th>Nama Kostumer</th>
@@ -60,73 +57,61 @@
                             <th>Print PDF</th>
                         </tr>
 
-                        @foreach($data as $data)
-
+                        @foreach($data as $order)
                         <tr>
-                            <td>{{$data->name}}</td>
-                            <td>{{$data->rec_address}}</td>
-                            <td>{{$data->phone}}</td>
-                            <td>{{$data->product->title}}</td>
-                            <td>{{$data->product->price}}</td>
+                            <td>{{$order->name}}</td>
+                            <td>{{$order->rec_address}}</td>
+                            <td>{{$order->phone}}</td>
+                            <td>{{$order->product->title}}</td>
+                            <td>{{$order->product->price}}</td>
                             <td>
-
-                                <img width="150" src="products/{{$data->products->image}}">
+                                <img width="150" src="products/{{$order->product->image}}">
                             </td>
 
                             <td>
-
-
-                                @if($data->status == 'in progress')
-
-                                <span style="color: red;">{{$data->status}}</span>
-
-                                @elseif($data->status == 'in progress')
-
-
-                                <span style="color: skyblue;">{{$data->status}}</span>
-
+                                @if($order->status == 'Dalam Perjalanan')
+                                    <span style="color: red;">{{$order->status}}</span>
+                                @elseif($order->status == 'Terkirim')
+                                    <span style="color: green;">{{$order->status}}</span>
                                 @else
-
-                                <span style="color: yellow;">{{$data->status}}</span>
-
+                                    <span style="color: yellow;">{{$order->status}}</span>
                                 @endif
                             </td>
 
                             <td>
-                                <a class="btn btn-primary" href="{{url('dalam_perjalanan',$data->id)}}">Dalam Perjalanan</a>
-
-                                <a class="btn btn-success" href="{{url('mengantar',$data->id)}}">Hapus</a>
-
-
+                                @if($order->status != 'Terkirim')
+                                    <a class="btn btn-primary" href="{{url('dalam_perjalanan',$order->id)}}">Dalam Perjalanan</a>
+                                    <a class="btn btn-success" href="{{url('terkirim',$order->id)}}">Terkirim</a>
+                                @else
+                                    <span>Sudah Terkirim</span>
+                                @endif
                             </td>
 
                             <td>
-
-                            <a class="btn btn-secondary" href="{{url('print_pdf',$data->id)}}">Print PDF</a>
-
+                                <a class="btn btn-secondary" href="{{url('print_pdf',$order->id)}}">Print PDF</a>
                             </td>
                         </tr>
-
                         @endforeach
 
                     </table>
-
-
                 </div>
             </div>
         </div>
-        <!-- JavaScript files-->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"
-            integrity="sha512-AA1Bzp5Q0K1KanKKmvN/4d3IRKVlv9PYgwFPvm32nPO6QS8yH1HO7LbgB1pgiOxPtfeg5zEn2ba64MUcqJx6CA=="
-            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        <script src="{{asset('admincss/vendor/jquery/jquery.min.js')}}"></script>
-        <script src="{{asset('admincss/vendor/popper.js/umd/popper.min.js')}}"> </script>
-        <script src="{{asset('admincss/vendor/bootstrap/js/bootstrap.min.js')}}"></script>
-        <script src="{{asset('admincss/vendor/jquery.cookie/jquery.cookie.js')}}"> </script>
-        <script src="{{asset('admincss/vendor/chart.js/Chart.min.js')}}"></script>
-        <script src="{{asset('admincss/vendor/jquery-validation/jquery.validate.min.js')}}"></script>
-        <script src="{{asset('admincss/js/charts-home.js')}}"></script>
-        <script src="{{asset('admincss/js/front.js')}}"></script>
+    </div>
+
+    <!-- JavaScript files-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"
+        integrity="sha512-AA1Bzp5Q0K1KanKKmvN/4d3IRKVlv9PYgwFPvm32nPO6QS8yH1HO7LbgB1pgiOxPtfeg5zEn2ba64MUcqJx6CA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="{{asset('admincss/vendor/jquery/jquery.min.js')}}"></script>
+    <script src="{{asset('admincss/vendor/popper.js/umd/popper.min.js')}}"> </script>
+    <script src="{{asset('admincss/vendor/bootstrap/js/bootstrap.min.js')}}"></script>
+    <script src="{{asset('admincss/vendor/jquery.cookie/jquery.cookie.js')}}"> </script>
+    <script src="{{asset('admincss/vendor/chart.js/Chart.min.js')}}"></script>
+    <script src="{{asset('admincss/vendor/jquery-validation/jquery.validate.min.js')}}"></script>
+    <script src="{{asset('admincss/js/charts-home.js')}}"></script>
+    <script src="{{asset('admincss/js/front.js')}}"></script>
+
 </body>
 
 </html>

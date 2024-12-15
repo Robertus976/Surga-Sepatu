@@ -1,17 +1,8 @@
 <section class="info_section  layout_padding2-top">
     <div class="social_container">
         <div class="social_box">
-            <a href="">
-                <i class="fa fa-facebook" aria-hidden="true"></i>
-            </a>
-            <a href="">
-                <i class="fa fa-twitter" aria-hidden="true"></i>
-            </a>
-            <a href="">
+            <a href="https://www.instagram.com/surgasepatujogja?igsh=cWZob2w5OGs5MHhy">
                 <i class="fa fa-instagram" aria-hidden="true"></i>
-            </a>
-            <a href="">
-                <i class="fa fa-youtube" aria-hidden="true"></i>
             </a>
         </div>
     </div>
@@ -20,65 +11,50 @@
             <div class="row">
                 <div class="col-md-6 col-lg-3">
                     <h6>
-                        ABOUT US
+                       Ada Pertanyaan?
                     </h6>
                     <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed doLorem ipsum dolor sit amet, consectetur adipiscing elit, sed doLorem ipsum dolor sit amet,
-                    </p>
-                </div>
-                <div class="col-md-6 col-lg-3">
-                    <div class="info_form ">
-                        <h5>
-                            Newsletter
-                        </h5>
-                        <form action="#">
-                            <input type="email" placeholder="Enter your email">
-                            <button>
-                                Subscribe
-                            </button>
-                        </form>
-                    </div>
-                </div>
-                <div class="col-md-6 col-lg-3">
-                    <h6>
-                        NEED HELP
-                    </h6>
-                    <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed doLorem ipsum dolor sit amet, consectetur adipiscing elit, sed doLorem ipsum dolor sit amet,
+                        Hubungi Kami (09.00-21.00 WIB)
                     </p>
                 </div>
                 <div class="col-md-6 col-lg-3">
                     <h6>
-                        CONTACT US
+                        Produk
+                    </h6>
+                    <p>
+                        Surga Sepatu memiliki beberapa produk alas kaki dari sepatu hingga sandal yang kekinian
+                    </p>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <h6>
+                        Butuh Bantuan?
+                    </h6>
+                    <p>
+                        Hubungi Kami Melalui Halaman (Hubungi Kami) bisa juga melalui Email atau nomor telepon yang tertera.
+                    </p>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <h6>
+                        Hubungi Kami
                     </h6>
                     <div class="info_link-box">
                         <a href="">
                             <i class="fa fa-map-marker" aria-hidden="true"></i>
-                            <span> Gb road 123 london Uk </span>
+                            <span> Jalan Selokan Mataram, Karang Gayam, Caturtunggal, Kec. Depok, kabupaten Sleman, Daerah Istimewa Yogyakarta </span>
                         </a>
                         <a href="">
                             <i class="fa fa-phone" aria-hidden="true"></i>
-                            <span>+01 12345678901</span>
+                            <span>0877-3138-2554</span>
                         </a>
                         <a href="">
                             <i class="fa fa-envelope" aria-hidden="true"></i>
-                            <span> demo@gmail.com</span>
+                            <span> surgasepatu@gmail.com</span>
                         </a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- footer section -->
-    <footer class=" footer_section">
-        <div class="container">
-            <p>
-                &copy; <span id="displayYear"></span> All Rights Reserved By
-                <a href="https://html.design/">Web Tech Knowledge</a>
-            </p>
-        </div>
-    </footer>
-    <!-- footer section -->
 
 </section>
 

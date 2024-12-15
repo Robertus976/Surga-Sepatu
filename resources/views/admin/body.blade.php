@@ -49,7 +49,7 @@
                         <div class="title">
                             <div class="icon"><i class="icon-writing-whiteboard"></i></div><strong>Total Pengiriman</strong>
                         </div>
-                        <div class="number dashtext-4">{{$mengantar}}</div>
+                        <div class="number dashtext-4">{{$deliverd}}</div>
                     </div>
                     <div class="progress progress-template">
                         <div role="progressbar" style="width: 35%" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100" class="progress-bar progress-bar-template dashbg-4"></div>
@@ -66,4 +66,5 @@
             <!-- Please do not remove the backlink to us unless you support us at https://bootstrapious.com/donate. It is part of the license conditions. Thank you for understanding :)-->
         </div>
     </div>
+
 </footer>

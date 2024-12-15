@@ -1,85 +1,76 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width,initial-scale=1">
-        <title></title>
+<html lang="en">
 
-        @include('home.css')
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>My Orders</title>
 
-        <style type="text/css">
-            .div_center
-            {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                margin: 60px;
-            }
+    @include('home.css')
 
-            table
-            {
-                border: 2px solid black;
-                text-align: center;
-                width: 800px;
-            }
+    <style type="text/css">
+        .div_center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 60px;
+        }
 
-            th
-            {
-                border: 2px solid skyblue;
-                background-color: black;
-                color: white;
-                font-size: 19px;
-                font-weight: bold;
-                text-align: center;
-            }
+        table {
+            border: 2px solid black;
+            text-align: center;
+            width: 800px;
+        }
 
-            td
-            {
-                border: 1px solid skyblue;
-                padding: 10px;
-            }
-        </style>
-    </head>
-    <body>
+        th {
+            border: 2px solid skyblue;
+            background-color: black;
+            color: white;
+            font-size: 19px;
+            font-weight: bold;
+            text-align: center;
+        }
 
-    
+        td {
+            border: 1px solid skyblue;
+            padding: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
     <div class="hero_area">
-        <!-- header section strats -->
+        <!-- Header section starts -->
         @include('home.header')
+        <!-- Header section ends -->
 
-    
         <div class="div_center">
+            <table>
+                <tr>
+                    <th>Nama Produk</th>
+                    <th>Harga</th>
+                    <th>Status Pengiriman</th>
+                    <th>Gambar</th>
+                </tr>
 
-        <table>
-            <tr>
-                <th>Nama Produk</th>
-                <th>Harga</th>
-                <th>Status Pengiriman</th>
-                <th>Gambar</th>
-            </tr>
-
-
-            @foreach($order as $order)
-
-            <tr>
-                <td>{{$order->product->title}}</td>
-                <td>{{$order->product->price}}</td>
-                <td>{{$order->status}}</td>
-                <td>
-                    <img height="200" width="300" src="products/{{$order->products->image}}">
-                </td>
-            </tr>
-
-            @endforeach
-
-
-
-        </table>
+                @foreach($order as $order)
+                    <tr>
+                        <td>{{ $order->product->title }}</td>
+                        <td>{{ $order->product->price }}</td>
+                        <td>{{ $order->status }}</td>
+                        <td>
+                            <img height="200" width="300" src="products/{{ $order->product->image }}" alt="{{ $order->product->title }}">
+                        </td>
+                    </tr>
+                @endforeach
+            </table>
         </div>
     </div>
-
-    
-
+ <!-- info section -->
+ <footer>
     @include('home.footer')
+</footer>
 </body>
+
 </html>
