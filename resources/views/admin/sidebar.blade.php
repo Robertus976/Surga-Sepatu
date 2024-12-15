@@ -12,7 +12,7 @@
         <!-- Sidebar Navidation Menus-->
         <span class="heading">Main</span>
         <ul class="list-unstyled">
-            <li class="active"><a href="index.html"> <i class="icon-home"></i>Home </a></li>
+            <li> <a href="{{ url('admin/dashboard') }}"> <i class="icon-home"></i>Home </a></li>
 
             <li>
                 <a href="{{url('view_category')}}"> <i class="icon-grid"></i>Kategori </a>
@@ -23,9 +23,13 @@
                     <li><a href="{{url('view_product')}}">View Produk</a></li>
                     <li><a href="#">Page</a></li>
                 </ul>
+
+            <li>
+                <a href="{{url('view_orders')}}"> <i class="icon-grid"></i>Order </a>
+            </li>
             </li>
             <!-- Menambahkan Menu Banner -->
-            <li><a href="#bannerDropdown" aria-expanded="false" data-toggle="collapse"> <i class="icon-image"></i>Banner </a>
+            <li><a href="#bannerDropdown" aria-expanded="false" data-toggle="collapse"> <i class="fa-image"></i>Banner </a>
                 <ul id="bannerDropdown" class="collapse list-unstyled ">
                     <li><a href="{{ route('add_banner') }}">Tambah Banner</a></li>
                     <li><a href="{{ route('view_banner') }}">View Banner</a></li>

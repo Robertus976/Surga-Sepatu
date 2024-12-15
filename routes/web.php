@@ -6,11 +6,14 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 
 // Home Route
-Route::get('/', [HomeController::class, 'home']);
+Route::get('/', [HomeController::class, 'home'])->name('home');
 
 // Dashboard Route
 Route::get('/dashboard', [HomeController::class, 'home'])
     ->middleware(['auth', 'verified'])->name('dashboard');
+
+    Route::get('/myorders', [HomeController::class, 'myorders'])
+    ->middleware(['auth', 'verified']);
 
 // Profile Routes
 Route::middleware('auth')->group(function () {
@@ -23,7 +26,7 @@ Route::middleware('auth')->group(function () {
 require __DIR__ . '/auth.php';
 
 // Admin Dashboard Route (should be handled by AdminController)
-Route::get('admin/dashboard', [AdminController::class, 'index'])->middleware(['auth', 'admin']);
+Route::get('admin/dashboard', [HomeController::class, 'index'])->middleware(['auth', 'admin']);
 
 // Route for Categories
 Route::get('view_category', [AdminController::class, 'view_category'])->middleware(['auth', 'admin']);
@@ -53,3 +56,29 @@ Route::middleware(['auth', 'admin'])->group(function() {
 
 // Product Details Route
 Route::get('product_details/{id}', [HomeController::class, 'product_details']);
+Route::get('/all-products', [HomeController::class, 'allProducts'])->name('all.products');
+Route::get('/kenapakami', [HomeController::class, 'whyus'])->name('why');
+
+Route::get('/contact', [HomeController::class, 'showForm'])->name('contact');
+Route::post('/send-email', [HomeController::class, 'sendEmail'])->name('send.email');
+
+Route::get('/search', [HomeController::class, 'search'])->name('search');
+
+Route::get('add_cart/{id}', [HomeController::class, 'add_cart'])->middleware(['auth', 'verified']);
+
+Route::get('mycart', [HomeController::class, 'mycart'])->middleware(['auth', 'verified']);
+
+Route::get('delete_cart/{id}', [HomeController::class, 'delete_cart'])
+    ->middleware(['auth', 'verified'])
+    ->name('delete.cart');
+
+ Route::post('confirm_order', [HomeController::class, 'confirm_order'])->middleware(['auth', 'verified']);
+
+
+//Order
+Route::get('view_orders', [AdminController::class, 'view_order'])->middleware(['auth', 'admin']);
+Route::get('dalam_perjalanan/{id}', [AdminController::class, 'dalam_perjalanan'])->middleware(['auth', 'admin']);
+Route::get('telah_terkirim/{id}', [AdminController::class, 'terkirim'])->middleware(['auth', 'admin']);
+
+//Print PDF
+Route::get('print_pdf/{id}', [AdminController::class, 'print_pdf'])->middleware(['auth', 'admin']);

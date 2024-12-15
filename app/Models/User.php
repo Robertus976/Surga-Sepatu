@@ -19,8 +19,9 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $fillable = [
         'name',
         'email',
-        'no_hp',
-        'alamat',
+        'usertype', // Kolom usertype
+        'no_hp',    // Kolom no_hp
+        'alamat',   // Kolom alamat
         'password',
     ];
 
@@ -35,9 +36,9 @@ class User extends Authenticatable implements MustVerifyEmail
     ];
 
     /**
-     * Get the attributes that should be cast.
+     * The attributes that should be cast.
      *
-     * @return array<string, string>
+     * @var array<string, string>
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
