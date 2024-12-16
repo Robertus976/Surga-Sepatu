@@ -37,7 +37,8 @@
             width: 100%;
         }
 
-        th, td {
+        th,
+        td {
             border: 1px solid #fdffff;
             text-align: left;
             padding: 8px;
@@ -96,16 +97,21 @@
         }
 
         .payment-buttons {
-    display: flex;
-    gap: 10px; /* Jarak antar tombol */
-    justify-content: space-between; /* Untuk memastikan tombol terpisah dengan jarak yang rata */
-}
+            display: flex;
+            gap: 10px;
+            /* Jarak antar tombol */
+            justify-content: space-between;
+            /* Untuk memastikan tombol terpisah dengan jarak yang rata */
+        }
 
-.payment-buttons .btn {
-    padding: 5px 10px; /* Ukuran padding tombol lebih kecil */
-    font-size: 14px; /* Ukuran teks tombol lebih kecil */
-    width: auto; /* Pastikan tombol tidak memanjang */
-}
+        .payment-buttons .btn {
+            padding: 5px 10px;
+            /* Ukuran padding tombol lebih kecil */
+            font-size: 14px;
+            /* Ukuran teks tombol lebih kecil */
+            width: auto;
+            /* Pastikan tombol tidak memanjang */
+        }
     </style>
 </head>
 
@@ -138,7 +144,7 @@
                     <input class="btn btn-primary" type="submit" value="Cash On Delivery">
 
                     <!-- Tombol Bayar Dengan Transfer -->
-                    <a class="btn btn-success" href="#">Bayar Dengan Transfer</a>
+                    <a class="btn btn-success" id="pay-button">Bayar Dengan Transfer</a>
                 </div>
 
             </form>
@@ -157,37 +163,37 @@
                 </thead>
                 <tbody>
                     @php
-                        $totalValue = 0; // Inisialisasi nilai total
+                    $totalValue = 0; // Inisialisasi nilai total
                     @endphp
 
                     @foreach ($cart as $item)
-                        <tr>
-                            <td>{{ $item->Product->title ?? 'Tidak Tersedia' }}</td>
-                            <td>
-                                @php
-                                    // Menghapus titik pemisah ribuan dan memeriksa apakah harga valid
-                                    $price = str_replace('.', '', $item->Product->price);
-                                @endphp
-                                Rp.{{ is_numeric($price) ? number_format($price, 0, ',', '.') : 'Harga Tidak Tersedia' }}
-                            </td>
-                            <td>
-                                @if (!empty($item->Product->image))
-                                    <img src="{{ asset('products/' . $item->Product->image) }}" alt="Gambar Produk">
-                                @else
-                                    Tidak Ada Gambar
-                                @endif
-                            </td>
-                            <td>
-                                <a href="{{ route('delete.cart', $item->product_id) }}" class="btn btn-danger">Hapus</a>
-                            </td>
-                        </tr>
-                        @php
-                        // Menghapus pemisah ribuan jika harga menggunakan titik
-                        $price = str_replace('.', '', $item->Product->price);
+                    <tr>
+                        <td>{{ $item->Product->title ?? 'Tidak Tersedia' }}</td>
+                        <td>
+                            @php
+                            // Menghapus titik pemisah ribuan dan memeriksa apakah harga valid
+                            $price = str_replace('.', '', $item->Product->price);
+                            @endphp
+                            Rp.{{ is_numeric($price) ? number_format($price, 0, ',', '.') : 'Harga Tidak Tersedia' }}
+                        </td>
+                        <td>
+                            @if (!empty($item->Product->image))
+                            <img src="{{ asset('products/' . $item->Product->image) }}" alt="Gambar Produk">
+                            @else
+                            Tidak Ada Gambar
+                            @endif
+                        </td>
+                        <td>
+                            <a href="{{ route('delete.cart', $item->product_id) }}" class="btn btn-danger">Hapus</a>
+                        </td>
+                    </tr>
+                    @php
+                    // Menghapus pemisah ribuan jika harga menggunakan titik
+                    $price = str_replace('.', '', $item->Product->price);
 
-                        // Pastikan harga valid dan tambahkan ke total
-                        $totalValue += is_numeric($price) ? $price : 0;
-                        @endphp
+                    // Pastikan harga valid dan tambahkan ke total
+                    $totalValue += is_numeric($price) ? $price : 0;
+                    @endphp
                     @endforeach
                 </tbody>
             </table>
@@ -202,5 +208,16 @@
     <!-- Footer -->
     @include('home.footer')
 </body>
+<script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ env('MIDTRANS_CLIENT_KEY') }}"></script>
+<script>
+    document.getElementById('pay-button').onclick = function() {
+        snap.pay("{{ $snapToken }}", {
+            onSuccess: function(result) {
+                console.log(result);
+                window.location.href = '/payment/success';
+            }
+        });
+    };
+</script>
 
 </html>

@@ -85,3 +85,4 @@ Route::get('terkirim/{id}', [AdminController::class, 'terkirim'])->middleware(['
 
 //Print PDF
 Route::get('print_pdf/{id}', [AdminController::class, 'print_pdf'])->middleware(['auth', 'admin']);
+Route::post('/confirm-order', [HomeController::class, 'confirm_order'])->name('confirm.order');
