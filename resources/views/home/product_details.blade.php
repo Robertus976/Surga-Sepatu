@@ -76,7 +76,7 @@
             text-transform: uppercase; /* Huruf kapital semua */
             font-family: 'Arial Black', Arial, sans-serif; /* Font lebih tegas */
             background: linear-gradient(45deg, #ff0000, #ffa500); /* Tambahkan gradasi warna */
-            -webkit-background-clip: text;
+    
             -webkit-text-fill-color: transparent; /* Efek teks berwarna */
         }
 
@@ -189,7 +189,7 @@
                 text-transform: uppercase; /* Huruf kapital semua */
                 font-family: 'Arial Black', Arial, sans-serif; /* Font lebih tegas */
                 background: linear-gradient(45deg, #ff0000, #ffa500); /* Tambahkan gradasi warna */
-                -webkit-background-clip: text;
+
                 -webkit-text-fill-color: transparent; /* Efek teks berwarna */
             }
 
