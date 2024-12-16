@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Cart;
 use App\Models\Order;
 use App\Models\User;
+use App\Services\MidtransService;
 
 class HomeController extends Controller
 {
@@ -22,7 +23,7 @@ class HomeController extends Controller
         $user = User::where('usertype', 'user')->get()->count();
         $product = Product::all()->count();
         $order = Order::all()->count();
-        $deliverd = Order::where('status','Terkirim')->get()->count();
+        $deliverd = Order::where('status', 'Terkirim')->get()->count();
 
 
         // Pass the variable to the view
@@ -37,8 +38,8 @@ class HomeController extends Controller
 
         // Mengambil produk terkini berdasarkan waktu penambahan
         $Recent_Products = Product::orderBy('created_at', 'desc') // Urutkan berdasarkan waktu dibuat (terbaru dulu)
-                                  ->take(8) // Batasi jumlah produk (misalnya 8)
-                                  ->get();
+            ->take(8) // Batasi jumlah produk (misalnya 8)
+            ->get();
 
         // Hitung jumlah item di keranjang
         $count = $this->getCartCount();
@@ -130,77 +131,84 @@ class HomeController extends Controller
     }
 
     public function mycart()
-    {
-        if (Auth::id()) {
-            $user = Auth::user();
-            $userid = $user->id;
+{
+    if (Auth::id()) {
+        $user = Auth::user();
+        $user_id = $user->id;
 
-            // Ambil item di keranjang
-            $cart = Cart::where('user_id', $userid)->get();
-            $count = $cart->count();
-        } else {
-            $cart = [];
-            $count = 0;
-        }
+        // Ambil item di keranjang
+        $cart = Cart::where('user_id', $user_id)->get();
+        $count = $cart->count();
 
-        return view('home.mycart', compact('cart', 'count'));
+        // Buat Snap Token menggunakan MidtransService
+        $midtrans = new MidtransService();
+        $order = new \stdClass();
+        $order->midtrans_order_id = 'ORDER-' . uniqid();
+        $order->name = $user->name;
+        $order->phone = $user->phone;
+
+        $snapToken = $midtrans->createSnapToken($order);
+    } else {
+        $cart = [];
+        $count = 0;
+        $snapToken = null;
     }
 
+    return view('home.mycart', compact('cart', 'count', 'snapToken'));
+}
     /**
      * Helper untuk menghitung jumlah item di keranjang
      */
     public function delete_cart($id)
-{
-    // Ambil ID user dan produk
-    $user = Auth::user();
-    $user_id = $user->id;
+    {
+        // Ambil ID user dan produk
+        $user = Auth::user();
+        $user_id = $user->id;
 
-    // Cari item keranjang berdasarkan user_id dan product_id
-    $cart_item = Cart::where('user_id', $user_id)->where('product_id', $id)->first();
+        // Cari item keranjang berdasarkan user_id dan product_id
+        $cart_item = Cart::where('user_id', $user_id)->where('product_id', $id)->first();
 
-    // Jika item ditemukan, hapus dari keranjang
-    if ($cart_item) {
-        $cart_item->delete();
-        return redirect()->back()->with('success', 'Produk berhasil dihapus dari keranjang!');
+        // Jika item ditemukan, hapus dari keranjang
+        if ($cart_item) {
+            $cart_item->delete();
+            return redirect()->back()->with('success', 'Produk berhasil dihapus dari keranjang!');
+        }
+
+        // Jika item tidak ditemukan
+        return redirect()->back()->with('error', 'Produk tidak ditemukan di keranjang!');
     }
 
-    // Jika item tidak ditemukan
-    return redirect()->back()->with('error', 'Produk tidak ditemukan di keranjang!');
-}
+    public function confirm_order(Request $request, MidtransService $midtransService)
+    {
+        $name = $request->name;
+        $address = $request->address;
+        $phone = $request->phone;
+        $user_id = Auth::user()->id;
 
-    public function confirm_order(Request $request)
-{
-    // Mengambil data dari request
-    $name = $request->name;
-    $address = $request->address;  // Mengganti variabel 'addres' dengan 'address'
-    $phone = $request->phone;
+        $cart = Cart::where('user_id', $user_id)->get();
 
-    // Mendapatkan ID user yang sedang login
-    $user_id = Auth::user()->id;
+        foreach ($cart as $carts) {
+            $order = new Order();
+            $order->name = $name;
+            $order->rec_address = $address;
+            $order->phone = $phone;
+            $order->user_id = $user_id;
+            $order->product_id = $carts->product_id;
+            $order->midtrans_order_id = 'ORDER-' . uniqid();
+            $order->save();
 
-    // Mengambil semua item dari keranjang berdasarkan user_id
-    $cart = Cart::where('user_id', $user_id)->get();
+            // Generate Snap Token menggunakan MidtransService
+            $snapToken = $midtransService->createSnapToken($order);
+            $order->snap_token = $snapToken;
+            $order->save();
+        }
 
-    // Membuat order untuk setiap item dalam keranjang
-    foreach ($cart as $carts) {
-        $order = new Order();  // Membuat objek order baru
-        $order->name = $name;
-        $order->rec_address = $address;  // Menggunakan variabel 'address'
-        $order->phone = $phone;
-        $order->user_id = $user_id;
-        $order->product_id = $carts->product_id;
+        // Hapus item dari keranjang
+        Cart::where('user_id', $user_id)->delete();
 
-        // Menyimpan data order ke dalam database
-        $order->save();
+        return redirect()->route('home.index')->with('success', 'Pesanan berhasil dikonfirmasi!');
     }
-
-    // Menghapus item keranjang setelah melakukan pemesanan (opsional)
-    Cart::where('user_id', $user_id)->delete();
-
-    // Mengarahkan kembali ke halaman sebelumnya dengan pesan sukses
-    return redirect()->back()->with('success', 'Pesanan berhasil dikonfirmasi!');
-}
-private function getCartCount()
+    private function getCartCount()
     {
         // Mengambil ID user yang sedang login
         if (Auth::check()) {
