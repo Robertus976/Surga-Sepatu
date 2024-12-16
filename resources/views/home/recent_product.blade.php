@@ -27,10 +27,10 @@
                                 {{ $product->title }}
                             </h6>
                             <h6>
-                                Harga:
-                                <span>
-                                    Rp.{{ $product->price }}
-                                </span>
+                                Harga
+                            <span class="product-price">
+                                <span class="currency">Rp.</span>{{ number_format($product->price, 0, ',', '.') }}
+                            </span>
                             </h6>
                         </div>
                         <!-- Detail Button -->

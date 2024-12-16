@@ -50,7 +50,8 @@
             text-transform: uppercase;
             font-family: 'Arial Black', Arial, sans-serif;
             background: linear-gradient(45deg, #ff0000, #ffa500);
-            
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .top-bar .search-bar {

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
 use App\Models\Product;
 use App\Models\Banner;
 use App\Mail\ContactMail;
@@ -18,17 +17,14 @@ class HomeController extends Controller
 {
     public function index()
     {
-
         // Count the number of users where 'usertype' is 'user'
         $user = User::where('usertype', 'user')->get()->count();
         $product = Product::all()->count();
         $order = Order::all()->count();
         $deliverd = Order::where('status', 'Terkirim')->get()->count();
 
-
         // Pass the variable to the view
-        return view('admin.index', compact('user', 'product', 'order', 'deliverd'));  // Ensure 'user' is passed here
-
+        return view('admin.index', compact('user', 'product', 'order', 'deliverd'));
     }
 
     public function home()
@@ -131,34 +127,54 @@ class HomeController extends Controller
     }
 
     public function mycart()
-{
-    if (Auth::id()) {
-        $user = Auth::user();
-        $user_id = $user->id;
+    {
+        if (Auth::id()) {
+            $user = Auth::user();
+            $user_id = $user->id;
 
-        // Ambil item di keranjang
-        $cart = Cart::where('user_id', $user_id)->get();
-        $count = $cart->count();
+            // Ambil item di keranjang
+            $cart = Cart::where('user_id', $user_id)->get();
+            $count = $cart->count();
 
-        // Buat Snap Token menggunakan MidtransService
-        $midtrans = new MidtransService();
-        $order = new \stdClass();
-        $order->midtrans_order_id = 'ORDER-' . uniqid();
-        $order->name = $user->name;
-        $order->phone = $user->phone;
+            // Hitung total amount dari produk dalam keranjang
+            $totalAmount = 0;
+            foreach ($cart as $item) {
+                $product = Product::find($item->product_id);
+                $totalAmount += (float) $product->price; // Menghitung harga produk, pastikan harga produk adalah tipe data yang sesuai
+            }
 
-        $snapToken = $midtrans->createSnapToken($order);
-    } else {
-        $cart = [];
-        $count = 0;
-        $snapToken = null;
+            // Buat Snap Token menggunakan MidtransService
+            $midtrans = new MidtransService();
+            $order = new \stdClass();
+            $order->midtrans_order_id = 'ORDER-' . uniqid();
+            $order->name = $user->name;
+            $order->phone = $user->phone;
+
+            // Create snap token dengan total amount yang dihitung
+            $snapToken = $midtrans->createSnapToken($order, $totalAmount); // Pass total amount yang dihitung
+        } else {
+            $cart = [];
+            $count = 0;
+            $snapToken = null;
+        }
+
+        return view('home.mycart', compact('cart', 'count', 'snapToken'));
     }
 
-    return view('home.mycart', compact('cart', 'count', 'snapToken'));
-}
     /**
      * Helper untuk menghitung jumlah item di keranjang
      */
+    private function getCartCount()
+    {
+        // Mengambil ID user yang sedang login
+        if (Auth::check()) {
+            $user_id = Auth::user()->id;
+            return Cart::where('user_id', $user_id)->count();
+        }
+
+        return 0;
+    }
+
     public function delete_cart($id)
     {
         // Ambil ID user dan produk
@@ -186,7 +202,7 @@ class HomeController extends Controller
         $user_id = Auth::user()->id;
 
         $cart = Cart::where('user_id', $user_id)->get();
-
+        $totalAmount = 0;
         foreach ($cart as $carts) {
             $order = new Order();
             $order->name = $name;
@@ -198,7 +214,7 @@ class HomeController extends Controller
             $order->save();
 
             // Generate Snap Token menggunakan MidtransService
-            $snapToken = $midtransService->createSnapToken($order);
+            $snapToken = $midtransService->createSnapToken($order, $totalAmount);
             $order->snap_token = $snapToken;
             $order->save();
         }
@@ -207,23 +223,5 @@ class HomeController extends Controller
         Cart::where('user_id', $user_id)->delete();
 
         return redirect()->route('home.index')->with('success', 'Pesanan berhasil dikonfirmasi!');
-    }
-    private function getCartCount()
-    {
-        // Mengambil ID user yang sedang login
-        if (Auth::check()) {
-            $user_id = Auth::user()->id;
-            return Cart::where('user_id', $user_id)->count();
-        }
-
-        return 0;
-    }
-    public function myorders()
-    {
-        $user = Auth::user()->id;
-        $count = Cart::where('user_id', $user)->get()->count();
-        $order = Order::where('user_id', $user)->get();
-
-        return view('home.order', compact('count', 'order'));
     }
 }
