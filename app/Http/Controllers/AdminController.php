@@ -109,31 +109,48 @@ class AdminController extends Controller
 
     public function update_product($id)
     {
-        $data = Product::find($id); // Menggunakan Product model
-        return view('admin.update_page', compact('data'));
+        $product = Product::findOrFail($id); // Menemukan produk berdasarkan ID
+        $category = Category::all(); // Mengambil semua kategori untuk dropdown
+        return view('admin.update_page', compact('product', 'category'));
     }
 
     public function edit_product(Request $request, $id)
-    {
-        $data = Product::find($id); // Menggunakan Product model
-        $data->title = $request->title;
-        $data->description = $request->description;
-        $data->price = $request->price;
-        $data->quantity = $request->quantity;
-        $data->category = $request->category;
+{
+    // Validate incoming request data
+    $request->validate([
+        'title' => 'required|string|max:255',
+        'description' => 'required|string',
+        'price' => 'nullable|numeric',
+        'quantity' => 'nullable|integer',
+        'category' => 'required|string',
+        'image' => 'nullable|image|mimes:jpg,png,jpeg,gif',
+    ]);
 
-        $image = $request->image;
+    // Find the product to update
+    $product = Product::findOrFail($id);
+
+    // Update the product data
+    $product->title = $request->input('title');
+    $product->description = $request->input('description');
+    $product->price = $request->input('price');
+    $product->quantity = $request->input('quantity');
+    $product->category = $request->input('category');
+
+    $image = $request->image;
 
         if ($image) {
             $imagename = time() . '.' . $image->getClientOriginalExtension();
-            $request->image->move('produks', $imagename);
-            $data->image = $imagename;
-        }
-
-        $data->save();
-
-        return redirect('/view_product');
+            $request->image->move('products', $imagename);
+            $product->image = $imagename;
     }
+
+    // Save the updated product
+    $product->save();
+
+    // Redirect to the view product page
+    return redirect('/view_product');
+}
+
 
     public function search_product(Request $request)
     {

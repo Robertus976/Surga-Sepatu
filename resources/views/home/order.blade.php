@@ -39,7 +39,6 @@
 </head>
 
 <body>
-
     <div class="hero_area">
         <!-- Header section starts -->
         @include('home.header')
@@ -54,7 +53,7 @@
                     <th>Gambar</th>
                 </tr>
 
-                @foreach($order as $order)
+                @foreach($orders as $order)
                     <tr>
                         <td>{{ $order->product->title }}</td>
                         <td>{{ $order->product->price }}</td>
@@ -67,10 +66,10 @@
             </table>
         </div>
     </div>
- <!-- info section -->
- <footer>
-    @include('home.footer')
-</footer>
+    <!-- Info section -->
+    <footer>
+        @include('home.footer')
+    </footer>
 </body>
 
 </html>

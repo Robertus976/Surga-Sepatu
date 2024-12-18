@@ -74,43 +74,27 @@
             box-sizing: border-box;
         }
 
-        .btn-primary {
-            background-color: #007bff;
-            border: none;
-            color: white;
-            padding: 10px 15px;
-            cursor: pointer;
-            width: 100%;
-        }
-
-        .btn-danger {
-            background-color: #dc3545;
-            border: none;
-            color: white;
-            padding: 10px 15px;
-            cursor: pointer;
-        }
-
         .total-value {
             text-align: center;
             margin-top: 20px;
         }
 
-        .payment-buttons {
-            display: flex;
-            gap: 10px;
-            /* Jarak antar tombol */
-            justify-content: space-between;
-            /* Untuk memastikan tombol terpisah dengan jarak yang rata */
+        button {
+            width: 100%;
+            margin: 10px 0;
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            color: white;
         }
 
-        .payment-buttons .btn {
-            padding: 5px 10px;
-            /* Ukuran padding tombol lebih kecil */
-            font-size: 14px;
-            /* Ukuran teks tombol lebih kecil */
-            width: auto;
-            /* Pastikan tombol tidak memanjang */
+        .btn-primary {
+            background-color: #007bff;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
         }
     </style>
 </head>
@@ -125,28 +109,27 @@
     <div class="content-wrapper">
         <!-- Formulir Pemesanan -->
         <div class="form-container">
-            <form method="POST" action="{{ url('confirm_order') }}">
+            <form method="POST" action="{{ url('confirm_order') }}" id="order-form">
                 @csrf
                 <div>
                     <label for="name">Nama Penerima</label>
-                    <input type="text" name="name" value="{{Auth::user()->name}}">
+                    <input type="text" name="name" value="{{ Auth::user()->name }}" id="name" required>
                 </div>
                 <div>
                     <label for="address">Alamat</label>
-                    <textarea name="address">{{Auth::user()->address}}</textarea>
+                    <textarea name="address" id="address" required>{{ Auth::user()->address }}</textarea>
                 </div>
                 <div>
                     <label for="phone">Nomor Telepon</label>
-                    <input type="text" name="phone" value="{{Auth::user()->phone}}">
+                    <input type="text" name="phone" value="{{ Auth::user()->phone }}" id="phone" required>
                 </div>
-                <div class="payment-buttons">
-                    <!-- Tombol COD (Cash On Delivery) -->
-                    <input class="btn btn-primary" type="submit" value="Cash On Delivery">
+                <input type="hidden" name="payment_method" id="payment_method">
 
-                    <!-- Tombol Bayar Dengan Transfer -->
-                    <a class="btn btn-success" id="pay-button">Bayar Dengan Transfer</a>
-                </div>
+                <!-- Tombol COD -->
+                <button type="button" class="btn-primary" onclick="setPaymentMethod('cod')">Bayar Cash on Delivery</button>
 
+                <!-- Tombol Midtrans -->
+                <button type="button" class="btn-primary" id="pay-snap">Bayar Transfer</button>
             </form>
         </div>
 
@@ -162,16 +145,13 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @php
-                    $totalValue = 0; // Inisialisasi nilai total
-                    @endphp
+                    @php $totalValue = 0; @endphp
 
                     @foreach ($cart as $item)
                     <tr>
                         <td>{{ $item->Product->title ?? 'Tidak Tersedia' }}</td>
                         <td>
                             @php
-                            // Menghapus titik pemisah ribuan dan memeriksa apakah harga valid
                             $price = str_replace('.', '', $item->Product->price);
                             @endphp
                             Rp.{{ is_numeric($price) ? number_format($price, 0, ',', '.') : 'Harga Tidak Tersedia' }}
@@ -184,21 +164,17 @@
                             @endif
                         </td>
                         <td>
-                            <a href="{{ route('delete.cart', $item->product_id) }}" class="btn btn-danger">Hapus</a>
+                            <a href="{{ route('delete.cart', $item->product_id) }}" class="btn-danger">Hapus</a>
                         </td>
                     </tr>
                     @php
-                    // Menghapus pemisah ribuan jika harga menggunakan titik
-                    $price = str_replace('.', '', $item->Product->price);
-
-                    // Pastikan harga valid dan tambahkan ke total
                     $totalValue += is_numeric($price) ? $price : 0;
                     @endphp
                     @endforeach
                 </tbody>
             </table>
 
-            <!-- Total Value -->
+            <!-- Total Harga -->
             <div class="total-value">
                 <h3>Total harga keranjang: Rp{{ number_format($totalValue, 0, ',', '.') }}</h3>
             </div>
@@ -207,17 +183,61 @@
 
     <!-- Footer -->
     @include('home.footer')
-</body>
-<script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ env('MIDTRANS_CLIENT_KEY') }}"></script>
-<script>
-    document.getElementById('pay-button').onclick = function() {
-        snap.pay("{{ $snapToken }}", {
-            onSuccess: function(result) {
-                console.log(result);
-                window.location.href = '/payment/success';
+
+    <!-- Midtrans Snap -->
+    <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ env('MIDTRANS_CLIENT_KEY') }}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Fungsi untuk pembayaran COD
+            window.setPaymentMethod = function (method) {
+                var name = document.getElementById("name").value;
+                var address = document.getElementById("address").value;
+                var phone = document.getElementById("phone").value;
+
+                if (name === "" || address === "" || phone === "") {
+                    alert("Pastikan semua kolom terisi sebelum melanjutkan!");
+                    return false;
+                }
+
+                document.getElementById('payment_method').value = method;
+                document.getElementById('order-form').submit();
             }
+
+            // Fungsi untuk pembayaran Midtrans
+            window.payWithMidtrans = function () {
+                var name = document.getElementById("name").value;
+                var address = document.getElementById("address").value;
+                var phone = document.getElementById("phone").value;
+
+                if (name === "" || address === "" || phone === "") {
+                    alert("Pastikan semua kolom terisi sebelum melanjutkan!");
+                    return false;
+                }
+
+                window.snap.pay("{{ $snapToken }}", {
+                    onSuccess: function (result) {
+                        console.log('Payment success:', result);
+                        alert("Pembayaran berhasil!");
+                        location.reload();
+                    },
+                    onPending: function (result) {
+                        console.log('Payment pending:', result);
+                        alert("Pembayaran tertunda. Silakan cek status pembayaran!");
+                    },
+                    onError: function (result) {
+                        console.log('Payment error:', result);
+                        alert("Pembayaran gagal. Silakan coba lagi!");
+                    },
+                    onClose: function () {
+                        alert('Popup ditutup tanpa menyelesaikan pembayaran.');
+                    }
+                });
+            }
+
+            // Hubungkan fungsi ke tombol
+            document.getElementById("pay-snap").onclick = payWithMidtrans;
         });
-    };
-</script>
+    </script>
+</body>
 
 </html>

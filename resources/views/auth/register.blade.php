@@ -16,37 +16,42 @@
         @csrf
         <!-- Input untuk Name -->
         <div class="form-group">
-            <label for="name">Name</label>
+            <label for="name">Nama Lengkap</label>
             <input type="text" class="form-control" id="name" name="name"
-                placeholder="Enter your name" value="{{ old('name') }}" required>
+                placeholder="Masukan Nama" value="{{ old('name') }}" required>
         </div>
 
         <!-- Input untuk Email -->
         <div class="form-group">
-            <label for="email">Email Address</label>
+            <label for="email">Alamat Email</label>
             <input type="email" class="form-control" id="email" name="email"
-                placeholder="Enter your email" value="{{ old('email') }}" required>
+                placeholder="Masukan Email" value="{{ old('email') }}" required>
+        </div>
+        <div class="form-group">
+            <label for="no_hp">No Hp</label>
+            <input type="text" class="form-control" id="no_hp" name="no_hp"
+                placeholder="Masukan No HP" value="{{ old('no_hp') }}" required>
         </div>
 
         <!-- Input untuk Alamat -->
         <div class="form-group">
-            <label for="address">Address</label>
-            <input type="text" class="form-control" id="address" name="address"
-                placeholder="Enter your address" value="{{ old('address') }}" required>
+            <label for="alamat">Alamat</label>
+            <input type="text" class="form-control" id="alamat" name="alamat"
+                placeholder="Masukan Alamat" value="{{ old('alamat') }}" required>
         </div>
 
         <!-- Input untuk Password -->
         <div class="form-group">
             <label for="password">Password</label>
             <input type="password" class="form-control" id="password" name="password"
-                placeholder="Enter your password" required>
+                placeholder="Masukan Sandi" required>
         </div>
 
         <!-- Input untuk Konfirmasi Password -->
         <div class="form-group">
             <label for="password_confirmation">Confirm Password</label>
             <input type="password" class="form-control" id="password_confirmation" name="password_confirmation"
-                placeholder="Confirm your password" required>
+                placeholder="Tulis Ulang Sandi" required>
         </div>
 
         <!-- Tombol Register -->

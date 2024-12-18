@@ -12,10 +12,6 @@ Route::get('/', [HomeController::class, 'home'])->name('home');
 Route::get('/dashboard', [HomeController::class, 'home'])
     ->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/myorders', [HomeController::class, 'myorders'])
-    ->middleware(['auth', 'verified'])->name('dashboard');
-
-
 // Profile Routes
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -45,6 +41,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('view_product', [AdminController::class, 'view_product'])->name('view_product');
     Route::get('hapus_product/{id}', [AdminController::class, 'hapus_product'])->name('hapus_product');
     Route::get('update_product/{id}', [AdminController::class, 'update_product'])->name('update_product');
+    Route::post('update_product/{id}', [AdminController::class, 'edit_product'])->name('update_product');
     Route::post('edit_product/{id}', [AdminController::class, 'edit_product'])->name('edit_product');
     Route::get('cari_product', [AdminController::class, 'search_product'])->name('search_product');
 
@@ -55,6 +52,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/update_banner/{id}', [AdminController::class, 'update_banner'])->name('update_banner');
     Route::post('/edit_banner/{id}', [AdminController::class, 'edit_banner'])->name('edit_banner');
     Route::get('/delete_banner/{id}', [AdminController::class, 'delete_banner'])->name('delete_banner');
+
 });
 
 // Product Details Route
@@ -76,6 +74,7 @@ Route::get('delete_cart/{id}', [HomeController::class, 'delete_cart'])
     ->name('delete.cart');
 
  Route::post('confirm_order', [HomeController::class, 'confirm_order'])->middleware(['auth', 'verified']);
+ Route::get('myorders', [HomeController::class, 'myorders'])->middleware(['auth', 'verified']);
 
 
 //Order
@@ -86,3 +85,5 @@ Route::get('terkirim/{id}', [AdminController::class, 'terkirim'])->middleware(['
 //Print PDF
 Route::get('print_pdf/{id}', [AdminController::class, 'print_pdf'])->middleware(['auth', 'admin']);
 Route::post('/confirm-order', [HomeController::class, 'confirm_order'])->name('confirm.order');
+
+
