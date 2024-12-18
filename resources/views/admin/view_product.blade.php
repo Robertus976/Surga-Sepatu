@@ -99,9 +99,7 @@
                             <td>{{$products->quantity}}</td>
 
                             <td>
-                               
-                                <img height="200" width="200" src="{{ asset('produks/' . $products->image) }}">
-
+                                <img height="200" width="200" src="{{ asset('products/' . $products->image) }}">
 
                             </td>
 

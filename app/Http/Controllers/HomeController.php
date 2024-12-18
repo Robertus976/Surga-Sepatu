@@ -12,6 +12,8 @@ use App\Models\Cart;
 use App\Models\Order;
 use App\Models\User;
 use App\Services\MidtransService;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
@@ -55,7 +57,6 @@ class HomeController extends Controller
         // Mengirim data ke view
         return view('home.product_details', compact('data', 'count'));
     }
-
     public function allProducts()
     {
         // Mengambil semua produk
@@ -67,7 +68,6 @@ class HomeController extends Controller
         // Mengirim data ke view
         return view('home.product', compact('Products', 'count'));
     }
-
     public function whyus()
     {
         return view('home.why');
@@ -196,32 +196,103 @@ class HomeController extends Controller
 
     public function confirm_order(Request $request, MidtransService $midtransService)
     {
+        // Ambil data dari request dan ID pengguna
         $name = $request->name;
         $address = $request->address;
         $phone = $request->phone;
         $user_id = Auth::user()->id;
+        $paymentMethod = $request->payment_method;
 
+        // Ambil semua item dari keranjang pengguna
         $cart = Cart::where('user_id', $user_id)->get();
-        $totalAmount = 0;
-        foreach ($cart as $carts) {
-            $order = new Order();
-            $order->name = $name;
-            $order->rec_address = $address;
-            $order->phone = $phone;
-            $order->user_id = $user_id;
-            $order->product_id = $carts->product_id;
-            $order->midtrans_order_id = 'ORDER-' . uniqid();
-            $order->save();
 
-            // Generate Snap Token menggunakan MidtransService
-            $snapToken = $midtransService->createSnapToken($order, $totalAmount);
-            $order->snap_token = $snapToken;
-            $order->save();
+        // Hitung total harga produk di keranjang
+        $totalAmount = 0;
+        foreach ($cart as $item) {
+            $product = Product::find($item->product_id);
+            if ($product) {
+                $totalAmount += (float) $product->price;
+            }
         }
 
-        // Hapus item dari keranjang
-        Cart::where('user_id', $user_id)->delete();
+        // Jika totalAmount lebih besar dari 0, lanjutkan proses pemesanan
+        if ($totalAmount > 0) {
+            // Mulai transaksi untuk memastikan semua data tersimpan dengan benar
+            DB::beginTransaction();
 
-        return redirect()->route('home.index')->with('success', 'Pesanan berhasil dikonfirmasi!');
+            try {
+                // Proses penyimpanan order untuk setiap item di keranjang
+                foreach ($cart as $item) {
+                    $order = new Order();
+                    $order->name = $name;
+                    $order->rec_address = $address;
+                    $order->phone = $phone;
+                    $order->user_id = $user_id;
+                    $order->product_id = $item->product_id;
+                    $order->midtrans_order_id = 'ORDER-' . uniqid(); // Order ID unik
+                    $order->status = 'Dalam Proses'; // Status awal
+
+                    // Tentukan status pembayaran berdasarkan metode pembayaran
+                    $order->payment_status = ($paymentMethod == 'cod') ? 'cash on delivery' : 'pending';
+
+                    // Simpan order terlebih dahulu
+                    $order->save();
+
+                    // Proses untuk Bank Transfer
+                    if ($paymentMethod == 'bank_transfer') {
+                        // Dapatkan Snap Token dari Midtrans
+                        $snapToken = $midtransService->createSnapToken($order, $totalAmount);
+
+                        if ($snapToken) {
+                            // Menyimpan Snap Token ke database
+                            $order->snap_token = $snapToken;
+                            $order->payment_status = 'pending'; // Update status pembayaran menjadi pending
+
+                            // Simpan order setelah update snap token
+                            $order->save(); // Simpan perubahan snap_token
+                            Log::info('Snap Token berhasil disimpan.', [
+                                'order_id' => $order->id,
+                                'snap_token' => $snapToken
+                            ]);
+                        } else {
+                            Log::warning('Snap Token gagal dibuat untuk Bank Transfer. Order tetap disimpan tanpa Snap Token.', [
+                                'order_id' => $order->id
+                            ]);
+                        }
+                    }
+                }
+
+                // Hapus semua item dari keranjang setelah pemesanan
+                Cart::where('user_id', $user_id)->delete();
+
+                // Commit transaksi untuk memastikan semua data tersimpan
+                DB::commit();
+
+                // Redirect kembali ke halaman sebelumnya dengan notifikasi sukses
+                return back()->with('success', 'Pesanan berhasil dibuat.');
+            } catch (\Exception $e) {
+                // Jika terjadi error, rollback transaksi
+                DB::rollBack();
+                Log::error('Terjadi kesalahan saat memproses order.', ['error' => $e->getMessage()]);
+
+                // Redirect kembali dengan pesan error
+                return back()->with('error', 'Terjadi kesalahan saat memproses pesanan.');
+            }
+        } else {
+            return back()->with('error', 'Total harga tidak valid.');
+        }
     }
+
+public function myorders()
+{
+    // Ambil data pengguna yang sedang login
+    $user = Auth::user();
+
+    // Ambil semua pesanan pengguna berdasarkan user_id
+    $orders = Order::where('user_id', $user->id)->get();
+
+    // Kembalikan view 'home.order' dengan data pesanan
+    return view('home.order', compact('orders'));
+}
+
 }

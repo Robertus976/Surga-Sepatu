@@ -48,73 +48,40 @@
     <div class="page-content">
         <div class="page-header">
             <div class="container-fluid">
-
-
-                <h1>Tambah Produk</h1>
+                <h1>Edit Banner</h1>
 
                 <div class="div_deg">
-
-
-                    <form action="{{url('upload_product')}}" method="Post" enctype="multipart/form-data">
-
-
+                    <form action="{{ url('edit_banner/' . $banner->id) }}" method="POST" enctype="multipart/form-data">
                         @csrf
 
                         <div class="input_deg">
-                            <label>Nama Produk</label>
-                            <input type="text" name="title" required>
+                            <label>Judul Banner</label>
+                            <input type="text" name="title" value="{{ $banner->title }}" required>
                         </div>
 
                         <div class="input_deg">
                             <label>Deskripsi</label>
-                            <textarea name="description" required></textarea>
+                            <textarea name="description" required>{{ $banner->description }}</textarea>
                         </div>
 
                         <div class="input_deg">
-                            <label>Harga</label>
-                            <input type="text" name="price">
+                            <label>Gambar Banner</label>
+                            <div>
+                                <img width="200" src="{{ asset('banners/' . $banner->image) }}" alt="Banner Image">
+                            </div>
                         </div>
 
                         <div class="input_deg">
-                            <label>Quantity</label>
-                            <input type="number" name="quantity">
-                        </div>
-
-                        <div class="input_deg">
-                            <label>Kategori Produk</label>
-
-
-                            <select name="category" required>
-                                <option>Pilih Opsi</option>
-
-                                @foreach($category as $category)
-
-                                <option value="{{$category->category_name}}">{{$category->category_name}}</option>
-
-
-                                @endforeach
-
-
-
-                            </select>
-                        </div>
-
-                        <div class="input_deg">
-                            <label>Gambar Produk</label>
+                            <label>Gambar Baru</label>
                             <input type="file" name="image">
                         </div>
 
                         <div class="input_deg">
-
-                            <input class="btn btn-success" type="submit" value="Tambah Produk">
+                            <input class="btn btn-success" type="submit" value="Update Banner">
                         </div>
 
-
                     </form>
-
                 </div>
-
-
 
             </div>
         </div>
