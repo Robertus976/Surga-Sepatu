@@ -311,7 +311,7 @@
                     <div class="box">
                         <!-- Gambar Produk -->
                         <div class="div_center">
-                            <img width = "400" src="{{ asset('products/' . $data->image) }}" alt="">
+                            <img width = "400" src="{{ asset('produks/' . $data->image) }}" alt="">
                         </div>
                         <div class="detail-box">
                             <h6>

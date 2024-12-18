@@ -90,16 +90,18 @@
                         <tr>
                             <td>{{$products->title}}</td>
 
-                            <td>{{$products->deskripsi}}</td>
+                            <td>{{$products->description}}</td>
 
                             <td>{{$products->category}}</td>
 
-                            <td>{{$products->harga}}</td>
+                            <td>{{$products->price}}</td>
 
                             <td>{{$products->quantity}}</td>
 
                             <td>
-                                <img height="200" width="200" src="products/{{$products->image}}">
+                               
+                                <img height="200" width="200" src="{{ asset('produks/' . $products->image) }}">
+
 
                             </td>
 
