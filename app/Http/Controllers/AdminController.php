@@ -125,7 +125,6 @@ class AdminController extends Controller
         'category' => 'required|string',
         'image' => 'nullable|image|mimes:jpg,png,jpeg,gif',
     ]);
-
     // Find the product to update
     $product = Product::findOrFail($id);
 
@@ -143,15 +142,12 @@ class AdminController extends Controller
             $request->image->move('products', $imagename);
             $product->image = $imagename;
     }
-
     // Save the updated product
     $product->save();
 
     // Redirect to the view product page
     return redirect('/view_product');
 }
-
-
     public function search_product(Request $request)
     {
         $search = $request->search;

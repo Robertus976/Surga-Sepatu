@@ -23,7 +23,7 @@
             color: white !important;
         }
 
-        input[type='text'] {
+        input[type='text'], input[type='number'], select {
             width: 350px;
             height: 50px;
         }
@@ -42,13 +42,11 @@
 <body>
 
     @include('admin.header')
-
     @include('admin.sidebar')
-    <!-- Sidebar Navigation end-->
+
     <div class="page-content">
         <div class="page-header">
             <div class="container-fluid">
-
                 <h1>Update Produk</h1>
 
                 <div class="div_deg">
@@ -89,7 +87,7 @@
 
                         <div class="input_deg">
                             <label>Gambar Produk</label>
-                            <img width="200" src="{{ asset('products/' . $product->image) }}" alt="Product Image">
+                            <img height="200" width="200" src="{{ asset('products/' . $product->image) }}" alt="Product Image">
                         </div>
 
                         <div class="input_deg">
