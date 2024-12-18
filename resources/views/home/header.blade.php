@@ -120,7 +120,7 @@
     <header class="header">
         <div class="top-bar">
             <div class="logo-container">
-                <img src="image/logo.jpg" alt="Logo">
+                <img src="{{ asset('image/logo.jpg') }}" alt="Logo">
                 <div class="logo-text">Surga Sepatu</div>
             </div>
             <div class="search-bar">

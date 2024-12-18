@@ -26,7 +26,7 @@
                     <div class="box">
                         <!-- Product Image -->
                         <div class="div_center">
-                            <img src="{{ asset('produks/' . $product->image) }}" alt="Product Image">
+                            <img src="{{ asset('products/' . $product->image) }}" alt="Product Image">
                         </div>
                         <div class="detail-box">
                             <h6>
