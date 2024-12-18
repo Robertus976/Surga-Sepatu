@@ -178,7 +178,7 @@
                         </td>
                         <td>
                             @if (!empty($item->Product->image))
-                            <img src="{{ asset('products/' . $item->Product->image) }}" alt="Gambar Produk">
+                            <img src="{{ asset('produks/' . $item->Product->image) }}" alt="Gambar Produk">
                             @else
                             Tidak Ada Gambar
                             @endif

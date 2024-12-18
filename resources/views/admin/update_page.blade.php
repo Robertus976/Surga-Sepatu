@@ -44,8 +44,8 @@
                 <div class="div_deg">
 
 
-                    <form action="{{url('edit_produk',$data->id)}}" method="post" enctype="multipart/form-data">
-
+                    
+                    <form action="{{ route('edit_product', $data->id) }}" method="post" enctype="multipart/form-data">
                         @csrf
 
                         <div>
@@ -55,12 +55,13 @@
 
                         <div>
                             <label>Deskripsi</label>
-                            <textarea name="deskripsi">{{$data->deskripsi}}</textarea>
+                            
+                            <textarea name="description">{{$data->description}}</textarea>
                         </div>
 
                         <div>
                             <label>Harga</label>
-                            <input type="text" name="harga" value="{{$data->harga}}">
+                            <input type="text" name="price" value="{{$data->price}}">
                         </div>
 
                         <div>
@@ -80,7 +81,9 @@
 
                         <div>
                             <label>Image</label>
-                            <img width="200" src="/produks/{{$data->image}}">
+                           
+                            <img height="200" width="200" src="{{ asset('produks/' . $data->image) }}">
+
                         </div>
 
                         <div>

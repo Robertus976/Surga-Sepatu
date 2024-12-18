@@ -115,7 +115,9 @@ class AdminController extends Controller
 
     public function edit_product(Request $request, $id)
     {
-        $data = Product::find($id); // Menggunakan Product model
+        //dd($request->all());
+        $data = Product::find($id); 
+        //dd($data);// Menggunakan Product model
         $data->title = $request->title;
         $data->description = $request->description;
         $data->price = $request->price;
@@ -135,6 +137,9 @@ class AdminController extends Controller
         return redirect('/view_product');
     }
 
+
+
+    
     public function search_product(Request $request)
     {
         $search = $request->search;
